@@ -12,7 +12,7 @@ mamba create \
     pyyaml jinja2 opencamlib ifcopenshell \
     pycollada lxml xlutils olefile requests \
     blinker opencv qt.py nine docutils \
-    --copy -c conda-forge -y
+    --copy -c conda-forge/label/freecad_rc -y
 
 
 mamba run -p ${conda_env} python ../scripts/get_freecad_version.py

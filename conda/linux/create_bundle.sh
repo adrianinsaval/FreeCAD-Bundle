@@ -11,12 +11,12 @@ echo -e "\nCreate the environment"
 packages="freecad=*.pre occt vtk python=3.11 blas=*=openblas numpy \
           matplotlib-base scipy sympy pandas six pyyaml pycollada lxml \
           xlutils olefile requests blinker opencv qt.py nine docutils" 
-if [[ "$ARCH" -eq "x86_64" ]]; then
-  packages=${packages} + " calculix opencamlib ifcopenshell appimage-updater-bridge"
+if [[ "$ARCH" = "x86_64" ]]; then
+  packages=${packages}" calculix opencamlib ifcopenshell appimage-updater-bridge"
 fi
 
 mamba create -p ${conda_env} ${packages} \
-  --copy -c conda-forge -y
+  --copy -c conda-forge/label/freecad_rc -y
 
 mamba run -p ${conda_env} python ../scripts/get_freecad_version.py
 read -r version_name < bundle_name.txt

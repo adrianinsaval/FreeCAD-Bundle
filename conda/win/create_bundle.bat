@@ -11,7 +11,7 @@ call mamba create ^
  libredwg pycollada lxml xlutils olefile requests ^
  blinker opencv qt.py nine docutils ^
  --copy ^
- -c conda-forge ^
+ -c conda-forge/label/freecad_rc ^
  -y
  
  
