@@ -22,8 +22,8 @@ jobs:
         run: |
           git clone https://github.com/FreeCAD/FreeCAD
           touch freecad_version.txt
-          wget https://raw.githubusercontent.com/FreeCAD/FreeCAD-Bundle/${GITHUB_REF##*/}/make_version_file.py
-          wget https://raw.githubusercontent.com/FreeCAD/FreeCAD-Bundle/${GITHUB_REF##*/}/disable_git_info.patch
+          wget https://raw.githubusercontent.com/adrianinsaval/FreeCAD-Bundle/${GITHUB_REF##*/}/make_version_file.py
+          wget https://raw.githubusercontent.com/adrianinsaval/FreeCAD-Bundle/${GITHUB_REF##*/}/disable_git_info.patch
           cd FreeCAD
           git checkout ${{ matrix.branch }}
           python ../make_version_file.py ../freecad_version.txt
