@@ -4,9 +4,6 @@ export MAMBA_NO_BANNER=1
 if [[ -z "$ARCH" ]]; then
   # Get the architecture of the system
   export ARCH=$(uname -m)
-  if [ "$ARCH" = "arm_aarch64" ]; then
-    export ARCH=arm_aarch64
-  fi
 fi
 conda_env="AppDir/usr"
 echo -e "\nCreate the environment"
@@ -90,6 +87,13 @@ else
   export tag="latest"
 fi
 
+if [[ -z "$APPIMAGE_ARCH" ]]; then
+  # Get the architecture of the system
+  export ARCH="$APPIMAGE_ARCH"
+fi
+if [ "$ARCH" = "aarch64" ]; then
+  export ARCH=arm_aarch64
+fi
 echo -e "\nCreate the appimage"
 chmod a+x ./AppDir/AppRun
 ../../appimagetool-$(uname -m).AppImage \

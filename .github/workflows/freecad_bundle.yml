@@ -14,10 +14,9 @@ jobs:
   build-bundles:
     runs-on: ${{ matrix.os }}
     strategy:
-      max-parallel: 4
+      max-parallel: 5
       fail-fast: false
       matrix:
-        os: [windows-latest, macos-latest, ubuntu-latest]
         tag: ["weekly-builds"]
         include:
           - os: windows-latest
@@ -26,9 +25,18 @@ jobs:
           - os: macos-latest
             bundle_dir: conda/osx
             asset_pattern: FreeCAD_.*macOS-x86_64
+          - os: macos-14
+            bundle_dir: conda/osx
+            asset_pattern: FreeCAD_.*macOS-arm64
           - os: ubuntu-latest
             bundle_dir: conda/linux
             asset_pattern: FreeCAD_.*Linux-x86_64
+            appimage_arch: "x86_64"
+          - os: ubuntu-latest
+            bundle_dir: conda/linux
+            asset_pattern: FreeCAD_.*Linux-aarch64
+            conda_subdir: "linux-aarch64"
+            appimage_arch: "arm_aarch64"
 
     steps:
       - if: matrix.os == 'windows-latest'
@@ -73,6 +81,8 @@ jobs:
         working-directory: ${{ matrix.bundle_dir}}
         env:
             DEPLOY_RELEASE: ${{ matrix.tag }}
+            CONDA_SUBDIR: ${{ matrix.conda_subdir }}
+            APPIMAGE_ARCH: ${{ matrix.appimage_arch }}
 
       - if: matrix.os == 'windows-latest'
         name: create windows bundle
