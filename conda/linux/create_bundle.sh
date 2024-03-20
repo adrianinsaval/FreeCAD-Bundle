@@ -4,6 +4,9 @@ export MAMBA_NO_BANNER=1
 if [[ -z "$ARCH" ]]; then
   # Get the architecture of the system
   export ARCH=$(uname -m)
+  if [ "$ARCH" = "arm_aarch64" ]; then
+    export ARCH=arm_aarch64
+  fi
 fi
 conda_env="AppDir/usr"
 echo -e "\nCreate the environment"
