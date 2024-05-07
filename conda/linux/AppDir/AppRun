@@ -30,6 +30,61 @@ export SSL_CERT_FILE=$PREFIX/ssl/cacert.pem
 # https://github.com/FreeCAD/FreeCAD-AppImage/pull/20
 export GIT_SSL_CAINFO=$HERE/usr/ssl/cacert.pem
 
+# Function to compare two version numbers
+compare_versions() {
+    local v1=$1
+    local v2=$2
+    local IFS=.
+    local i
+    local diff
+
+    # Split version numbers into components
+    local arr1=($v1)
+    local arr2=($v2)
+
+    # Compare each component
+    for ((i=0; i<${#arr1[@]} || i<${#arr2[@]}; i++)); do
+        # Set missing components to 0
+        if [[ -z ${arr1[i]} ]]; then
+            arr1[i]=0
+        fi
+        if [[ -z ${arr2[i]} ]]; then
+            arr2[i]=0
+        fi
+
+        # Compare components numerically
+        if (( ${arr1[i]} > ${arr2[i]} )); then
+            echo "1"  # v1 is greater
+            return
+        elif (( ${arr1[i]} < ${arr2[i]} )); then
+            echo "-1"  # v2 is greater
+            return
+        fi
+    done
+
+    echo "0"  # versions are equal
+}
+
+if [ "$FC_NO_GLIBCXX_CHECK" = "" ] && [ "$LD_PRELOAD" = ""]; then
+    if [ -e $(which ldconfig)] && [ -e $(which readelf)] && [ -e $(which uname)]
+        ARCH=$(uname -m)
+        if [ "$ARCH" = "aarch64" ]; then
+            ARCH=AArch64
+        fi
+        if [ "$ARCH" = "x86_64" ]; then
+            ARCH=x86-64
+        fi
+        system_lib=$(ldconfig -p | grep stdc++ | grep "${ARCH}" | awk '{print $4}' | tail -1)
+        appimage_lib="${HERE}/usr/lib/libstdc++.so"
+        system_ver=$(readelf -sV "${system_lib}" | sed -n 's/.*@@GLIBCXX_//p' | sort -u -V | tail -1)
+        appimage_ver=$(readelf -sV "${appimage_lib}" | sed -n 's/.*@@GLIBCXX_//p' | sort -u -V | tail -1)
+        if [ $(compare_versions "${appimage_ver}" "${system_ver}") -eq -1 ]; then
+            export LD_PRELOAD="${system_lib}"
+            echo "LD_PRELOAD=$LD_PRELOAD"
+        fi
+    fi
+fi
+
 # Support for launching other applications (from /usr/bin)
 # https://github.com/FreeCAD/FreeCAD-AppImage/issues/30
 if [ ! -z "$1" ] && [ -e "$HERE/usr/bin/$1" ] ; then
