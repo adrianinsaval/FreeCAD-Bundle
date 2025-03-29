@@ -57,19 +57,19 @@ robocopy %conda_env%\Library\bin %copy_dir%\bin\ gmsh.exe /MT:%NUMBER_OF_PROCESS
 robocopy %conda_env%\Library\bin %copy_dir%\bin\ dot.exe /MT:%NUMBER_OF_PROCESSORS% > nul
 robocopy %conda_env%\Library\bin %copy_dir%\bin\ unflatten.exe /MT:%NUMBER_OF_PROCESSORS% > nul
 robocopy %conda_env%\Library\mingw-w64\bin * %copy_dir%\bin\ /MT:%NUMBER_OF_PROCESSORS% > nul
-REM Copy Conda's QT5/plugins to FreeCAD/bin
-robocopy %conda_env%\Library\plugins %copy_dir%\bin\ /S /MT:%NUMBER_OF_PROCESSORS% > nul
-robocopy %conda_env%\Library\resources %copy_dir%\resources /MT:%NUMBER_OF_PROCESSORS% > nul
-robocopy %conda_env%\Library\translations %copy_dir%\translations /MT:%NUMBER_OF_PROCESSORS% > nul
-echo [Paths] > %copy_dir%\bin\qt6.conf
-echo Prefix = ../lib/qt6 >> "%copy_dir%\bin\qt6.conf"
+REM Copy Conda's QT6 files to FreeCAD/bin
+robocopy %conda_env%\Library\lib\qt6\plugins %copy_dir%\bin\plugins /S /MT:%NUMBER_OF_PROCESSORS% > nul
+robocopy %conda_env%\Library\lib\qt6\qml %copy_dir%\bin\qml /MT:%NUMBER_OF_PROCESSORS% > nul
+robocopy %conda_env%\Library\share\qt6\translations %copy_dir%\bin\translations /MT:%NUMBER_OF_PROCESSORS% > nul
+REM echo [Paths] > %copy_dir%\bin\qt6.conf
+REM echo Prefix = .. >> "%copy_dir%\bin\qt6.conf"
 REM get all the dependency .dlls
 robocopy %conda_env%\Library\bin *.dll %copy_dir%\bin /XF *.pdb /XF api*.* /MT:%NUMBER_OF_PROCESSORS% > nul
 REM Copy FreeCAD build
 robocopy %conda_env%\Library\bin FreeCAD* %copy_dir%\bin /XF *.pdb /MT:%NUMBER_OF_PROCESSORS% > nul
 robocopy %conda_env%\Library\data %copy_dir%\data /XF *.txt /S /MT:%NUMBER_OF_PROCESSORS% > nul
 robocopy %conda_env%\Library\Ext %copy_dir%\Ext /S /XD __pycache__ /MT:%NUMBER_OF_PROCESSORS% > nul
-robocopy %conda_env%\Library\lib %copy_dir%\lib /XF *.lib /XF *.prl /XF *.sh /XF *.exe /XF *.bat /XF *.cmake /S /MT:%NUMBER_OF_PROCESSORS% > nul
+robocopy %conda_env%\Library\lib %copy_dir%\lib /XF *.lib /XF *.prl /XF *.sh /MT:%NUMBER_OF_PROCESSORS% > nul
 robocopy %conda_env%\Library\Mod %copy_dir%\Mod /S /XD __pycache__ /MT:%NUMBER_OF_PROCESSORS% > nul
 robocopy %conda_env%\Library\doc %copy_dir%\doc ThirdPartyLibraries.html LICENSE.html /MT:%NUMBER_OF_PROCESSORS% > nul
 REM Apply Patches
