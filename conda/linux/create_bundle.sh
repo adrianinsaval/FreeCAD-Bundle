@@ -8,6 +8,7 @@ conda_env="AppDir/usr"
 echo -e "\nCreate the environment"
 
 mamba create --copy -y -p ${conda_env} \
+  -c adrianinsaval \
   -c freecad \
   -c conda-forge \
   freecad=1.0.1 \
