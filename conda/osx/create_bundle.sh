@@ -25,7 +25,6 @@ mamba create -y --copy -c freecad -c conda-forge -p ${conda_env} \
     opencv \
     pandas \
     pycollada \
-    pythonocc-core \
     pyyaml \
     requests \
     scipy \
